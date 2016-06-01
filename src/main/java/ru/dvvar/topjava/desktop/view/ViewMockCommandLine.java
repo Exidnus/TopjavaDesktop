@@ -11,6 +11,9 @@ import java.util.List;
 @Component
 public class ViewMockCommandLine implements View {
 
+    private static final String username = "user";
+    private static final String password = "password";
+
     @Override
     public void refresh(List<UserMealWithExceed> data) {
         data.forEach(System.out::println);
