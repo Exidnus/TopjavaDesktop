@@ -1,5 +1,10 @@
 package ru.dvvar.topjava.desktop.model;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -11,7 +16,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ru.dvvar.topjava.desktop.domain.UserMealWithExceed;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,16 +35,43 @@ public class ModelHttp implements Model {
     @Autowired
     private RestTemplate template;
 
+    @Autowired
+    private JsonFactory factory;
+
+    @Autowired
+    private ObjectMapper mapper;
+
     @Override
     public List<UserMealWithExceed> getAll() {
-        return null;
+        final ResponseEntity<String> resultGetHttpRequest = template.exchange(URL_GET_ALL, HttpMethod.GET,
+                new HttpEntity<>(createHeadersHttpBasic(USERNAME, PASSWORD)), String.class);
+        List<UserMealWithExceed> allMeals = new ArrayList<>();
+        try {
+            final JsonParser parser = factory.createParser(resultGetHttpRequest.getBody());
+            parser.nextToken();
+            while (parser.nextToken() == JsonToken.START_OBJECT) {
+                allMeals.add(mapper.readValue(parser, UserMealWithExceed.class));
+            }
+        } catch (IOException e) {
+            System.err.println("IOException in ModelHttp.getAll()");
+        }
+        return allMeals;
     }
 
-    public void test() {
+    public void test() throws Exception {
         ResponseEntity<String> result = template.exchange(URL_GET_ALL, HttpMethod.GET,
                 new HttpEntity<>(createHeadersHttpBasic(USERNAME, PASSWORD)), String.class);
-        System.out.println(result.getStatusCode());
-        System.out.println(result.getBody());
+        System.out.println("Code is " + result.getStatusCode());
+
+        JsonFactory factory = new JsonFactory();
+        JsonParser parser = factory.createParser(result.getBody());
+        parser.nextToken();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        while (parser.nextToken() == JsonToken.START_OBJECT) {
+            UserMealWithExceed meal = mapper.readValue(parser, UserMealWithExceed.class);
+            System.out.println(meal);
+        }
     }
 
     private HttpHeaders createHeadersHttpBasic(String username, String password) {
@@ -53,7 +87,7 @@ public class ModelHttp implements Model {
         this.template = template;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         ModelHttp modelHttp = new ModelHttp();
         modelHttp.setTemplate(new RestTemplate());
         modelHttp.test();
