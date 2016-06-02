@@ -1,13 +1,14 @@
 package ru.dvvar.topjava.desktop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.dvvar.topjava.desktop.model.Model;
 import ru.dvvar.topjava.desktop.view.View;
 
 /**
  * Created by Dmitriy_Varygin on 01.06.2016.
  */
-@org.springframework.stereotype.Controller
+@Component
 public class ControllerImpl implements Controller {
 
     @Autowired

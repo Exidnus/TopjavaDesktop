@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -53,25 +52,9 @@ public class ModelHttp implements Model {
                 allMeals.add(mapper.readValue(parser, UserMealWithExceed.class));
             }
         } catch (IOException e) {
-            System.err.println("IOException in ModelHttp.getAll()");
+            System.err.println("IOException in ModelHttp.getAll(): " + e);
         }
         return allMeals;
-    }
-
-    public void test() throws Exception {
-        ResponseEntity<String> result = template.exchange(URL_GET_ALL, HttpMethod.GET,
-                new HttpEntity<>(createHeadersHttpBasic(USERNAME, PASSWORD)), String.class);
-        System.out.println("Code is " + result.getStatusCode());
-
-        JsonFactory factory = new JsonFactory();
-        JsonParser parser = factory.createParser(result.getBody());
-        parser.nextToken();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        while (parser.nextToken() == JsonToken.START_OBJECT) {
-            UserMealWithExceed meal = mapper.readValue(parser, UserMealWithExceed.class);
-            System.out.println(meal);
-        }
     }
 
     private HttpHeaders createHeadersHttpBasic(String username, String password) {
@@ -81,15 +64,5 @@ public class ModelHttp implements Model {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", authHeader);
         return headers;
-    }
-
-    public void setTemplate(RestTemplate template) {
-        this.template = template;
-    }
-
-    public static void main(String[] args) throws Exception {
-        ModelHttp modelHttp = new ModelHttp();
-        modelHttp.setTemplate(new RestTemplate());
-        modelHttp.test();
     }
 }

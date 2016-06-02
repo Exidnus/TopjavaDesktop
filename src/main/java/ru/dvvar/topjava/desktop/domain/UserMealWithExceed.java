@@ -70,6 +70,31 @@ public class UserMealWithExceed {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserMealWithExceed that = (UserMealWithExceed) o;
+
+        if (getCalories() != that.getCalories()) return false;
+        if (isExceed() != that.isExceed()) return false;
+        if (!getId().equals(that.getId())) return false;
+        if (!getDescription().equals(that.getDescription())) return false;
+        return getDateTime().equals(that.getDateTime());
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId().hashCode();
+        result = 31 * result + getDescription().hashCode();
+        result = 31 * result + getDateTime().hashCode();
+        result = 31 * result + getCalories();
+        result = 31 * result + (isExceed() ? 1 : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "UserMealWithExceed{" +
                 "id=" + id +
