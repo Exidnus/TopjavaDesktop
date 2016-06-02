@@ -19,6 +19,7 @@ public class UserMealTestData {
     public static final int MEAL_ID_1 = 100_007;
 
     public static final UserMeal MEAL_1 = new UserMeal(MEAL_ID_1, "Supper", LocalDateTime.of(2015, 5, 31, 20, 0), 510);
+    public static final UserMeal MEAL_FOR_SAVE = new UserMeal("Good dinner", LocalDateTime.of(2016, 1, 2, 14, 0), 800);
 
     public static final List<UserMealWithExceed> MEALS_WITH_EXCEEDS = Arrays.asList(
             new UserMealWithExceed(100_007, "Supper", LocalDateTime.of(2015, 5, 31, 20, 0), 510, true),

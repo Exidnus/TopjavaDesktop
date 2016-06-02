@@ -90,9 +90,25 @@ public class ModelHttp implements Model {
         }
         HttpHeaders headers = createHeadersHttpBasic(USERNAME, PASSWORD);
         headers.set("Content-Type", "application/json;charset=UTF-8");
-        final ResponseEntity<String> resultUpdateHttpRequest = template.exchange(URL + "/" + meal.getId(), HttpMethod.PUT,
+        final ResponseEntity<String> resultPutHttpRequest = template.exchange(URL + "/" + meal.getId(), HttpMethod.PUT,
                 new HttpEntity<>(jsonMeal, headers), String.class);
-        return resultUpdateHttpRequest.getStatusCode() == HttpStatus.OK;
+        return resultPutHttpRequest.getStatusCode() == HttpStatus.OK;
+    }
+
+    @Override
+    public boolean create(UserMeal meal) {
+        String jsonMeal;
+        try {
+            jsonMeal = mapper.writeValueAsString(meal);
+        } catch (JsonProcessingException e) {
+            System.err.println("JsonProcessingException in ModelHttp.create(): " + e);
+            return false;
+        }
+        HttpHeaders headers = createHeadersHttpBasic(USERNAME, PASSWORD);
+        headers.set("Content-Type", "application/json;charset=UTF-8");
+        final ResponseEntity<String> resultPostHttpRequest = template.exchange(URL, HttpMethod.POST,
+                new HttpEntity<>(jsonMeal, headers), String.class);
+        return resultPostHttpRequest.getStatusCode() == HttpStatus.CREATED;
     }
 
     private HttpHeaders createHeadersHttpBasic(String username, String password) {

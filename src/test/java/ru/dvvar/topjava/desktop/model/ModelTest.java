@@ -16,9 +16,7 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 import static net.jadler.Jadler.*;
-import static ru.dvvar.topjava.desktop.UserMealTestData.MEALS_WITH_EXCEEDS;
-import static ru.dvvar.topjava.desktop.UserMealTestData.MEAL_1;
-import static ru.dvvar.topjava.desktop.UserMealTestData.MEAL_ID_1;
+import static ru.dvvar.topjava.desktop.UserMealTestData.*;
 
 /**
  * Created by Dmitriy_Varygin on 02.06.2016.
@@ -95,5 +93,16 @@ public class ModelTest extends TestCase {
                 .withStatus(200);
 
         assertTrue(model.update(MEAL_1));
+    }
+
+    @Test
+    public void shouldCreate() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("POST")
+                .havingPathEqualTo(PATH)
+                .respond()
+                .withStatus(201);
+
+        assertTrue(model.create(MEAL_FOR_SAVE));
     }
 }
