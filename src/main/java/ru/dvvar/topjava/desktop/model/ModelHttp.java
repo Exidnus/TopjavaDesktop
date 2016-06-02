@@ -13,6 +13,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import ru.dvvar.topjava.desktop.domain.UserMeal;
 import ru.dvvar.topjava.desktop.domain.UserMealWithExceed;
 
 import java.io.IOException;
@@ -27,7 +28,7 @@ import java.util.List;
 @Primary
 public class ModelHttp implements Model {
 
-    private static final String URL_GET_ALL = "http://localhost:8080/topjava/rest/profile/meals";
+    private static final String URL = "http://localhost:8080/topjava/rest/profile/meals";
     private static final String USERNAME = "user@yandex.ru";
     private static final String PASSWORD = "password";
 
@@ -42,7 +43,7 @@ public class ModelHttp implements Model {
 
     @Override
     public List<UserMealWithExceed> getAll() {
-        final ResponseEntity<String> resultGetHttpRequest = template.exchange(URL_GET_ALL, HttpMethod.GET,
+        final ResponseEntity<String> resultGetHttpRequest = template.exchange(URL, HttpMethod.GET,
                 new HttpEntity<>(createHeadersHttpBasic(USERNAME, PASSWORD)), String.class);
         List<UserMealWithExceed> allMeals = new ArrayList<>();
         try {
@@ -55,6 +56,21 @@ public class ModelHttp implements Model {
             System.err.println("IOException in ModelHttp.getAll(): " + e);
         }
         return allMeals;
+    }
+
+    @Override
+    public UserMeal getOne(int id) {
+        final ResponseEntity<String> resultGetHttpRequest = template.exchange(URL + "/" + id, HttpMethod.GET,
+                new HttpEntity<>(createHeadersHttpBasic(USERNAME, PASSWORD)), String.class);
+        UserMeal meal = null;
+        try {
+            final JsonParser parser = factory.createParser(resultGetHttpRequest.getBody());
+            meal = mapper.readValue(parser, UserMeal.class);
+        } catch (IOException e) {
+            System.err.println("IOException in ModelHttp.getOne(): " + e);
+        }
+
+        return meal;
     }
 
     private HttpHeaders createHeadersHttpBasic(String username, String password) {

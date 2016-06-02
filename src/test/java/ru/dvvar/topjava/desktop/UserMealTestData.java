@@ -1,5 +1,6 @@
 package ru.dvvar.topjava.desktop;
 
+import ru.dvvar.topjava.desktop.domain.UserMeal;
 import ru.dvvar.topjava.desktop.domain.UserMealWithExceed;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,10 @@ public class UserMealTestData {
     private UserMealTestData() {
 
     }
+
+    public static final int MEAL_ID_1 = 100_007;
+
+    public static final UserMeal MEAL_1 = new UserMeal(MEAL_ID_1, "Supper", LocalDateTime.of(2015, 5, 31, 20, 0), 510);
 
     public static final List<UserMealWithExceed> MEALS_WITH_EXCEEDS = Arrays.asList(
             new UserMealWithExceed(100_007, "Supper", LocalDateTime.of(2015, 5, 31, 20, 0), 510, true),
