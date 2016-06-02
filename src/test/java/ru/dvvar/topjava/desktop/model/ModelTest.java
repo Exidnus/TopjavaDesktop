@@ -85,4 +85,15 @@ public class ModelTest extends TestCase {
 
         assertTrue(model.delete(MEAL_ID_1));
     }
+
+    @Test
+    public void shouldUpdate() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("PUT")
+                .havingPathEqualTo(PATH + "/" + MEAL_ID_1)
+                .respond()
+                .withStatus(200);
+
+        assertTrue(model.update(MEAL_1));
+    }
 }

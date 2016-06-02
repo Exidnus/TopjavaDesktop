@@ -28,4 +28,9 @@ public class ModelMock implements Model {
     public boolean delete(int id) {
         return true;
     }
+
+    @Override
+    public boolean update(UserMeal meal) {
+        return true;
+    }
 }

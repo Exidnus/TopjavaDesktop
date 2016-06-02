@@ -2,6 +2,7 @@ package ru.dvvar.topjava.desktop.model;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.binary.Base64;
@@ -74,11 +75,24 @@ public class ModelHttp implements Model {
     public boolean delete(int id) {
         final ResponseEntity<String> resultDeleteHttpRequest = template.exchange(URL + "/" + id, HttpMethod.DELETE,
                 new HttpEntity<>(createHeadersHttpBasic(USERNAME, PASSWORD)), String.class);
-        if (resultDeleteHttpRequest.getStatusCode() == HttpStatus.OK) {
-            return true;
-        } else {
+        return resultDeleteHttpRequest.getStatusCode() == HttpStatus.OK;
+    }
+
+    @Override
+    public boolean update(UserMeal meal) {
+        if (meal.getId() == null) throw new IllegalArgumentException("Meal's id must not be null");
+        String jsonMeal;
+        try {
+            jsonMeal = mapper.writeValueAsString(meal);
+        } catch (JsonProcessingException e) {
+            System.err.println("JsonProcessingException in ModelHttp.update(): " + e);
             return false;
         }
+        HttpHeaders headers = createHeadersHttpBasic(USERNAME, PASSWORD);
+        headers.set("Content-Type", "application/json;charset=UTF-8");
+        final ResponseEntity<String> resultUpdateHttpRequest = template.exchange(URL + "/" + meal.getId(), HttpMethod.PUT,
+                new HttpEntity<>(jsonMeal, headers), String.class);
+        return resultUpdateHttpRequest.getStatusCode() == HttpStatus.OK;
     }
 
     private HttpHeaders createHeadersHttpBasic(String username, String password) {

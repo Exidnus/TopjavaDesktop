@@ -15,4 +15,6 @@ public interface Model {
     UserMeal getOne(int id);
 
     boolean delete(int id);
+
+    boolean update(UserMeal meal);
 }
