@@ -16,11 +16,11 @@ public class UserMealTestData {
     }
 
     public static final List<UserMealWithExceed> MEALS_WITH_EXCEEDS = Arrays.asList(
-            new UserMealWithExceed(100_007, "Ужин", LocalDateTime.of(2015, 5, 31, 20, 0), 510, true),
-            new UserMealWithExceed(100_006, "Обед", LocalDateTime.of(2015, 5, 31, 13, 0), 1000, true),
-            new UserMealWithExceed(100_005, "Завтрак", LocalDateTime.of(2015, 5, 31, 10, 0), 500, true),
-            new UserMealWithExceed(100_004, "Ужин", LocalDateTime.of(2015, 5, 30, 20, 0), 500, false),
-            new UserMealWithExceed(100_003, "Обед", LocalDateTime.of(2015, 5, 30, 13, 0), 1000, false),
-            new UserMealWithExceed(100_002, "Завтрак", LocalDateTime.of(2015, 5, 30, 10, 0), 500, false)
+            new UserMealWithExceed(100_007, "Supper", LocalDateTime.of(2015, 5, 31, 20, 0), 510, true),
+            new UserMealWithExceed(100_006, "Dinner", LocalDateTime.of(2015, 5, 31, 13, 0), 1000, true),
+            new UserMealWithExceed(100_005, "Breakfast", LocalDateTime.of(2015, 5, 31, 10, 0), 500, true),
+            new UserMealWithExceed(100_004, "Supper", LocalDateTime.of(2015, 5, 30, 20, 0), 500, false),
+            new UserMealWithExceed(100_003, "Dinner", LocalDateTime.of(2015, 5, 30, 13, 0), 1000, false),
+            new UserMealWithExceed(100_002, "Breakfast", LocalDateTime.of(2015, 5, 30, 10, 0), 500, false)
     );
 }

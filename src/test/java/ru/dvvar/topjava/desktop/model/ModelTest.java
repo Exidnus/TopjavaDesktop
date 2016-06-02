@@ -39,6 +39,7 @@ public class ModelTest extends TestCase {
         Jadler.closeJadler();
     }
 
+    //TODO resolve problem with bad encoding
     @Test
     public void shouldGetAll() throws Exception {
         Jadler.onRequest()
@@ -46,12 +47,12 @@ public class ModelTest extends TestCase {
                 .havingPathEqualTo(PATH)
                 .respond()
                 .withStatus(200)
-                .withBody("[{\"id\":100007,\"dateTime\":\"2015-05-31T20:00:00\",\"description\":\"Ужин\",\"calories\":510,\"exceed\":true}," +
-                        "{\"id\":100006,\"dateTime\":\"2015-05-31T13:00:00\",\"description\":\"Обед\",\"calories\":1000,\"exceed\":true}," +
-                        "{\"id\":100005,\"dateTime\":\"2015-05-31T10:00:00\",\"description\":\"Завтрак\",\"calories\":500,\"exceed\":true}," +
-                        "{\"id\":100004,\"dateTime\":\"2015-05-30T20:00:00\",\"description\":\"Ужин\",\"calories\":500,\"exceed\":false}," +
-                        "{\"id\":100003,\"dateTime\":\"2015-05-30T13:00:00\",\"description\":\"Обед\",\"calories\":1000,\"exceed\":false}," +
-                        "{\"id\":100002,\"dateTime\":\"2015-05-30T10:00:00\",\"description\":\"Завтрак\",\"calories\":500,\"exceed\":false}]")
+                .withBody("[{\"id\":100007,\"dateTime\":\"2015-05-31T20:00:00\",\"description\":\"Supper\",\"calories\":510,\"exceed\":true}," +
+                        "{\"id\":100006,\"dateTime\":\"2015-05-31T13:00:00\",\"description\":\"Dinner\",\"calories\":1000,\"exceed\":true}," +
+                        "{\"id\":100005,\"dateTime\":\"2015-05-31T10:00:00\",\"description\":\"Breakfast\",\"calories\":500,\"exceed\":true}," +
+                        "{\"id\":100004,\"dateTime\":\"2015-05-30T20:00:00\",\"description\":\"Supper\",\"calories\":500,\"exceed\":false}," +
+                        "{\"id\":100003,\"dateTime\":\"2015-05-30T13:00:00\",\"description\":\"Dinner\",\"calories\":1000,\"exceed\":false}," +
+                        "{\"id\":100002,\"dateTime\":\"2015-05-30T10:00:00\",\"description\":\"Breakfast\",\"calories\":500,\"exceed\":false}]")
                 .withEncoding(Charset.forName("UTF-8"));
 
         final List<UserMealWithExceed> result = model.getAll();
