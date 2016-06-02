@@ -23,4 +23,9 @@ public class ModelMock implements Model {
     public UserMeal getOne(int id) {
         return new UserMeal(id, "Supper", LocalDateTime.of(2015, 5, 31, 20, 0), 510);
     }
+
+    @Override
+    public boolean delete(int id) {
+        return true;
+    }
 }

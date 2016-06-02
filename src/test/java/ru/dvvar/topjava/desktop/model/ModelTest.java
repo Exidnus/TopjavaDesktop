@@ -74,4 +74,15 @@ public class ModelTest extends TestCase {
         final UserMeal result = model.getOne(MEAL_ID_1);
         assertEquals(result, MEAL_1);
     }
+
+    @Test
+    public void shouldDelete() throws Exception {
+        onRequest()
+                .havingMethodEqualTo("DELETE")
+                .havingPathEqualTo(PATH + "/" + MEAL_ID_1)
+                .respond()
+                .withStatus(200);
+
+        assertTrue(model.delete(MEAL_ID_1));
+    }
 }

@@ -13,4 +13,6 @@ public interface Model {
     List<UserMealWithExceed> getAll();
 
     UserMeal getOne(int id);
+
+    boolean delete(int id);
 }

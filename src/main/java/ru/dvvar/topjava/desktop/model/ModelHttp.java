@@ -7,10 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ru.dvvar.topjava.desktop.domain.UserMeal;
@@ -71,6 +68,17 @@ public class ModelHttp implements Model {
         }
 
         return meal;
+    }
+
+    @Override
+    public boolean delete(int id) {
+        final ResponseEntity<String> resultDeleteHttpRequest = template.exchange(URL + "/" + id, HttpMethod.DELETE,
+                new HttpEntity<>(createHeadersHttpBasic(USERNAME, PASSWORD)), String.class);
+        if (resultDeleteHttpRequest.getStatusCode() == HttpStatus.OK) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private HttpHeaders createHeadersHttpBasic(String username, String password) {
