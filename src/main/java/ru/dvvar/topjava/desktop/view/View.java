@@ -10,4 +10,8 @@ import java.util.List;
 public interface View {
 
     void refresh(List<UserMealWithExceed> data);
+
+    void refresh();
+
+    void run();
 }

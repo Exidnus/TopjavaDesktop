@@ -1,6 +1,8 @@
 package ru.dvvar.topjava.desktop.view;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.dvvar.topjava.desktop.controller.Controller;
 import ru.dvvar.topjava.desktop.domain.UserMealWithExceed;
 
 import java.util.List;
@@ -11,8 +13,18 @@ import java.util.List;
 @Component
 public class ViewMockCommandLine implements View {
 
-    private static final String username = "user";
-    private static final String password = "password";
+    @Autowired
+    private Controller controller;
+
+    @Override
+    public void run() {
+        refresh();
+    }
+
+    @Override
+    public void refresh() {
+        controller.getAll();
+    }
 
     @Override
     public void refresh(List<UserMealWithExceed> data) {

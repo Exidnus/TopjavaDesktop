@@ -2,8 +2,11 @@ package ru.dvvar.topjava.desktop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.dvvar.topjava.desktop.domain.UserMealWithExceed;
 import ru.dvvar.topjava.desktop.model.Model;
 import ru.dvvar.topjava.desktop.view.View;
+
+import java.util.List;
 
 /**
  * Created by Dmitriy_Varygin on 01.06.2016.
@@ -18,7 +21,7 @@ public class ControllerImpl implements Controller {
     private Model model;
 
     @Override
-    public void getAll() {
-        view.refresh(model.getAll());
+    public List<UserMealWithExceed> getAll() {
+        return model.getAll();
     }
 }
