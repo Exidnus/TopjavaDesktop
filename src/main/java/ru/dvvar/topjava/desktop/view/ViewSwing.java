@@ -1,7 +1,6 @@
 package ru.dvvar.topjava.desktop.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import ru.dvvar.topjava.desktop.controller.Controller;
 import ru.dvvar.topjava.desktop.domain.UserMealWithExceed;
@@ -14,7 +13,7 @@ import java.util.List;
  * Created by Dmitriy_Varygin on 02.06.2016.
  */
 @Component
-@Primary
+//@Primary
 public class ViewSwing extends JFrame implements View {
 
     @Autowired
