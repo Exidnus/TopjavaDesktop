@@ -1,5 +1,6 @@
 package ru.dvvar.topjava.desktop.controller;
 
+import ru.dvvar.topjava.desktop.domain.UserMeal;
 import ru.dvvar.topjava.desktop.domain.UserMealWithExceed;
 
 import java.util.List;
@@ -10,4 +11,10 @@ import java.util.List;
 public interface Controller {
 
     List<UserMealWithExceed> getAll();
+
+    void delete(int id);
+
+    void update(UserMeal userMeal);
+
+    void create(UserMeal userMeal);
 }
