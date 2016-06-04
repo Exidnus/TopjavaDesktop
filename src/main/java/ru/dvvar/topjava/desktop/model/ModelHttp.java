@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +22,7 @@ import java.util.List;
  * Created by Dmitriy_Varygin on 01.06.2016.
  */
 @Component
-@Primary
+//@Primary
 public class ModelHttp implements Model {
 
     private static final String URL = "http://localhost:8080/topjava/rest/profile/meals";
