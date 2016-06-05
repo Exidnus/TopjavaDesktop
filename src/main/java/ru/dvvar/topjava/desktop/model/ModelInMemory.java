@@ -25,6 +25,7 @@ public class ModelInMemory implements Model {
         meals.put(100_007, new UserMealWithExceed(100_007, "Supper", LocalDateTime.of(2015, 5, 31, 20, 0), 510, true));
         meals.put(100_006, new UserMealWithExceed(100_006, "Dinner", LocalDateTime.of(2015, 5, 31, 13, 0), 1000, true));
         meals.put(100_005, new UserMealWithExceed(100_005, "Breakfast", LocalDateTime.of(2015, 5, 31, 10, 0), 500, true));
+        meals.put(100_004, new UserMealWithExceed(100_004, "Supper", LocalDateTime.of(2015, 1, 30, 19, 0), 400, false));
     }
 
 

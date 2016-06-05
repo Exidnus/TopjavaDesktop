@@ -6,12 +6,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -100,6 +98,27 @@ public class ViewJavaFX extends Application implements View {
             }
         });
         table.getColumns().addAll(description, dateTime, calories);
+
+        table.setRowFactory(new Callback<TableView<UserMealWithExceed>, TableRow<UserMealWithExceed>>() {
+            @Override
+            public TableRow<UserMealWithExceed> call(TableView<UserMealWithExceed> param) {
+                return new TableRow<UserMealWithExceed>() {
+                    @Override
+                    protected void updateItem(UserMealWithExceed item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (item != null) {
+                            if (item.isExceed()) {
+                                setStyle("-fx-background-color: lightcoral");
+                            } else {
+                                setStyle("-fx-background-color: lightgreen");
+                            }
+                        }
+                    }
+                };
+            }
+        });
+
 
         table.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
             System.out.println(observable);
