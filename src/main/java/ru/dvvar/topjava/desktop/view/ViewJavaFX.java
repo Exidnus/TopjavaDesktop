@@ -13,6 +13,7 @@ import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import ru.dvvar.topjava.desktop.config.Config;
 import ru.dvvar.topjava.desktop.controller.Controller;
@@ -24,11 +25,13 @@ import java.util.List;
  * Created by Dmitriy_Varygin on 04.06.2016.
  */
 @Component
-//@Primary
+@Primary
 public class ViewJavaFX extends Application implements View {
 
     @Autowired
     private Controller controller;
+
+    private TableView<UserMealWithExceed> table;
 
     @Override
     public void refresh(List<UserMealWithExceed> data) {
@@ -63,7 +66,31 @@ public class ViewJavaFX extends Application implements View {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
 
-        TableView<UserMealWithExceed> table = new TableView<>();
+        initTable();
+
+        grid.add(table, 0, 0);
+        Scene scene = new Scene(grid, 500, 300);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private void initTable() {
+        table = new TableView<>();
+
+        initColumns();
+        initColoursForRows();
+
+        table.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
+            System.out.println(observable);
+            System.out.println(oldValue);
+            System.out.println(newValue);
+        }));
+
+        ObservableList<UserMealWithExceed> data = FXCollections.observableArrayList(controller.getAll());
+        table.setItems(data);
+    }
+
+    private void initColumns() {
         TableColumn<UserMealWithExceed, String> description = new TableColumn<>("Description");
         description.setCellValueFactory(param -> {
             try {
@@ -98,7 +125,9 @@ public class ViewJavaFX extends Application implements View {
             }
         });
         table.getColumns().addAll(description, dateTime, calories);
+    }
 
+    private void initColoursForRows() {
         table.setRowFactory(new Callback<TableView<UserMealWithExceed>, TableRow<UserMealWithExceed>>() {
             @Override
             public TableRow<UserMealWithExceed> call(TableView<UserMealWithExceed> param) {
@@ -118,20 +147,5 @@ public class ViewJavaFX extends Application implements View {
                 };
             }
         });
-
-
-        table.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
-            System.out.println(observable);
-            System.out.println(oldValue);
-            System.out.println(newValue);
-        }));
-
-        ObservableList<UserMealWithExceed> data = FXCollections.observableArrayList(controller.getAll());
-        table.setItems(data);
-
-        grid.add(table, 0, 0);
-        Scene scene = new Scene(grid, 500, 300);
-        primaryStage.setScene(scene);
-        primaryStage.show();
     }
 }

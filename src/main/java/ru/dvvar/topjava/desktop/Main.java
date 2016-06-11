@@ -10,7 +10,7 @@ import ru.dvvar.topjava.desktop.view.View;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         ApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
         View view = context.getBean(View.class);
         view.run();
