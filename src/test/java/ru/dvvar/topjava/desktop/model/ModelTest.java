@@ -32,7 +32,7 @@ public class ModelTest extends TestCase {
 
     @Before
     public void setUp() {
-        initJadlerListeningOn(8080);
+        initJadlerListeningOn(808);
     }
 
     @After
@@ -48,6 +48,7 @@ public class ModelTest extends TestCase {
                 .havingPathEqualTo(PATH)
                 .respond()
                 .withStatus(200)
+                .withContentType("application/json")
                 .withBody("[{\"id\":100007,\"dateTime\":\"2015-05-31T20:00:00\",\"description\":\"Supper\",\"calories\":510,\"exceed\":true}," +
                         "{\"id\":100006,\"dateTime\":\"2015-05-31T13:00:00\",\"description\":\"Dinner\",\"calories\":1000,\"exceed\":true}," +
                         "{\"id\":100005,\"dateTime\":\"2015-05-31T10:00:00\",\"description\":\"Breakfast\",\"calories\":500,\"exceed\":true}," +
@@ -67,6 +68,7 @@ public class ModelTest extends TestCase {
                 .havingPathEqualTo(PATH + "/" + MEAL_ID_1)
                 .respond()
                 .withStatus(200)
+                .withContentType("application/json")
                 .withBody("{\"id\":100007,\"dateTime\":\"2015-05-31T20:00:00\",\"description\":\"Supper\",\"calories\":510}");
 
         final UserMeal result = model.getOne(MEAL_ID_1);

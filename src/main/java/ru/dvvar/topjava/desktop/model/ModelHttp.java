@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -16,16 +17,17 @@ import ru.dvvar.topjava.desktop.domain.UserMealWithExceed;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by Dmitriy_Varygin on 01.06.2016.
  */
 @Component
-//@Primary
+@Primary
 public class ModelHttp implements Model {
 
-    private static final String URL = "http://localhost:8080/topjava/rest/profile/meals";
+    private static final String URL = "http://localhost:808/topjava/rest/profile/meals";
     private static final String USERNAME = "user@yandex.ru";
     private static final String PASSWORD = "password";
 
@@ -40,34 +42,17 @@ public class ModelHttp implements Model {
 
     @Override
     public List<UserMealWithExceed> getAll() {
-        final ResponseEntity<String> resultGetHttpRequest = template.exchange(URL, HttpMethod.GET,
-                new HttpEntity<>(createHeadersHttpBasic(USERNAME, PASSWORD)), String.class);
-        List<UserMealWithExceed> allMeals = new ArrayList<>();
-        try {
-            final JsonParser parser = factory.createParser(resultGetHttpRequest.getBody());
-            parser.nextToken();
-            while (parser.nextToken() == JsonToken.START_OBJECT) {
-                allMeals.add(mapper.readValue(parser, UserMealWithExceed.class));
-            }
-        } catch (IOException e) {
-            System.err.println("IOException in ModelHttp.getAll(): " + e);
-        }
-        return allMeals;
+        final ResponseEntity<UserMealWithExceed[]> resultGetHttpRequest = template.exchange(URL, HttpMethod.GET,
+                new HttpEntity<>(createHeadersHttpBasic(USERNAME, PASSWORD)), UserMealWithExceed[].class);
+
+        return Arrays.asList(resultGetHttpRequest.getBody());
     }
 
     @Override
     public UserMeal getOne(int id) {
-        final ResponseEntity<String> resultGetHttpRequest = template.exchange(URL + "/" + id, HttpMethod.GET,
-                new HttpEntity<>(createHeadersHttpBasic(USERNAME, PASSWORD)), String.class);
-        UserMeal meal = null;
-        try {
-            final JsonParser parser = factory.createParser(resultGetHttpRequest.getBody());
-            meal = mapper.readValue(parser, UserMeal.class);
-        } catch (IOException e) {
-            System.err.println("IOException in ModelHttp.getOne(): " + e);
-        }
-
-        return meal;
+        final ResponseEntity<UserMeal> resultGetHttpRequest = template.exchange(URL + "/" + id, HttpMethod.GET,
+                new HttpEntity<>(createHeadersHttpBasic(USERNAME, PASSWORD)), UserMeal.class);
+        return resultGetHttpRequest.getBody();
     }
 
     @Override
@@ -80,33 +65,19 @@ public class ModelHttp implements Model {
     @Override
     public boolean update(UserMeal meal) {
         if (meal.getId() == null) throw new IllegalArgumentException("Meal's id must not be null");
-        String jsonMeal;
-        try {
-            jsonMeal = mapper.writeValueAsString(meal);
-        } catch (JsonProcessingException e) {
-            System.err.println("JsonProcessingException in ModelHttp.update(): " + e);
-            return false;
-        }
         HttpHeaders headers = createHeadersHttpBasic(USERNAME, PASSWORD);
         headers.set("Content-Type", "application/json;charset=UTF-8");
         final ResponseEntity<String> resultPutHttpRequest = template.exchange(URL + "/" + meal.getId(), HttpMethod.PUT,
-                new HttpEntity<>(jsonMeal, headers), String.class);
+                new HttpEntity<>(meal, headers), String.class);
         return resultPutHttpRequest.getStatusCode() == HttpStatus.OK;
     }
 
     @Override
     public boolean create(UserMeal meal) {
-        String jsonMeal;
-        try {
-            jsonMeal = mapper.writeValueAsString(meal);
-        } catch (JsonProcessingException e) {
-            System.err.println("JsonProcessingException in ModelHttp.create(): " + e);
-            return false;
-        }
         HttpHeaders headers = createHeadersHttpBasic(USERNAME, PASSWORD);
         headers.set("Content-Type", "application/json;charset=UTF-8");
         final ResponseEntity<String> resultPostHttpRequest = template.exchange(URL, HttpMethod.POST,
-                new HttpEntity<>(jsonMeal, headers), String.class);
+                new HttpEntity<>(meal, headers), String.class);
         return resultPostHttpRequest.getStatusCode() == HttpStatus.CREATED;
     }
 

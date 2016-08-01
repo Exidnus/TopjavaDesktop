@@ -14,7 +14,7 @@ import java.util.*;
  * Created by Dmitriy_Varygin on 04.06.2016.
  */
 @Component
-@Primary
+//@Primary
 public class ModelInMemory implements Model {
 
     private final Map<Integer, UserMealWithExceed> meals = new HashMap<>();
