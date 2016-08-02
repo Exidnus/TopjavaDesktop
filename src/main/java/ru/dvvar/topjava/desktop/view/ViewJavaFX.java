@@ -25,8 +25,8 @@ import java.util.List;
 /**
  * Created by Dmitriy_Varygin on 04.06.2016.
  */
-@Component
-@Primary
+//@Component
+//@Primary
 public class ViewJavaFX extends Application implements View {
 
     @Autowired

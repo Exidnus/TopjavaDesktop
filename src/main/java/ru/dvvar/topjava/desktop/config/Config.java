@@ -19,14 +19,4 @@ public class Config {
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
-
-    @Bean
-    public JsonFactory jsonFactory() {
-        return new JsonFactory();
-    }
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper().registerModule(new JavaTimeModule());
-    }
 }
