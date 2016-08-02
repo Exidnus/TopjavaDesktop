@@ -24,7 +24,7 @@ import java.util.List;
  * Created by Dmitriy_Varygin on 01.06.2016.
  */
 @Component
-@Primary
+//@Primary
 public class ModelHttp implements Model {
 
     private static final String URL = "http://localhost:808/topjava/rest/profile/meals";

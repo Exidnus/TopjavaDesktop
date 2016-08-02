@@ -3,9 +3,9 @@ package ru.dvvar.topjava.desktop.domain;
 /**
  * Created by Dmitriy_Varygin on 04.06.2016.
  */
-public class Constructor {
+public class ConstructorUtil {
 
-    private Constructor() {
+    private ConstructorUtil() {
 
     }
 

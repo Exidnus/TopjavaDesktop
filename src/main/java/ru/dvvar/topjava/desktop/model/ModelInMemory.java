@@ -2,7 +2,7 @@ package ru.dvvar.topjava.desktop.model;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
-import ru.dvvar.topjava.desktop.domain.Constructor;
+import ru.dvvar.topjava.desktop.domain.ConstructorUtil;
 import ru.dvvar.topjava.desktop.domain.UserMeal;
 import ru.dvvar.topjava.desktop.domain.UserMealWithExceed;
 
@@ -14,7 +14,7 @@ import java.util.*;
  * Created by Dmitriy_Varygin on 04.06.2016.
  */
 @Component
-//@Primary
+@Primary
 public class ModelInMemory implements Model {
 
     private final Map<Integer, UserMealWithExceed> meals = new HashMap<>();
@@ -38,7 +38,7 @@ public class ModelInMemory implements Model {
 
     @Override
     public UserMeal getOne(int id) {
-        return Constructor.toUserMeal(meals.get(id));
+        return ConstructorUtil.toUserMeal(meals.get(id));
     }
 
     @Override
@@ -48,12 +48,15 @@ public class ModelInMemory implements Model {
 
     @Override
     public boolean update(UserMeal meal) {
-        if (!meals.containsKey(meal.getId())) return false;
-        UserMealWithExceed withExceed = meals.get(meal.getId());
-        withExceed.setDescription(meal.getDescription());
-        withExceed.setDateTime(meal.getDateTime());
-        withExceed.setCalories(meal.getCalories());
-        return true;
+        if (!meals.containsKey(meal.getId())) {
+            return false;
+        } else {
+            UserMealWithExceed withExceed = meals.get(meal.getId());
+            withExceed.setDescription(meal.getDescription());
+            withExceed.setDateTime(meal.getDateTime());
+            withExceed.setCalories(meal.getCalories());
+            return true;
+        }
     }
 
     @Override

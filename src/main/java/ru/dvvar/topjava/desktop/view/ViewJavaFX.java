@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -31,11 +32,32 @@ public class ViewJavaFX extends Application implements View {
     @Autowired
     private Controller controller;
 
-    private TableView<UserMealWithExceed> table;
+    private TableView<UserMealWithExceed> meals = new TableView<>();
+    private ObservableList<UserMealWithExceed> data;
+    //private List<UserMealWithExceed> oldMeals;
+
+    private Button button = new Button("Say 'Hello'!");
+    private Label label = new Label();
+
+    private GridPane editor = new GridPane();
+    private int editingMealId;
+    private TextField calories = new TextField();
+    private Label nameCalories = new Label("Calories");
+    private TextField description = new TextField();
+    private Label nameDescription = new Label("Description");
+    private TextField dateTime = new TextField();
+    private Label nameDateTime = new Label("Date and Time");
+    private Button save = new Button("Save");
+    private Button cancel = new Button("Cancel");
+    private Button delete = new Button("Delete");
 
     @Override
-    public void refresh(List<UserMealWithExceed> data) {
-
+    public void refresh(List<UserMealWithExceed> newMeals) {
+        meals.getItems().clear();
+        meals.refresh();
+        meals.getItems().addAll(newMeals);
+        meals.refresh();
+        refresh();
     }
 
     @Override
@@ -59,35 +81,52 @@ public class ViewJavaFX extends Application implements View {
         controller = context.getBean(Controller.class);
 
         primaryStage.setTitle("Meal's manager");
-        Button button = new Button("Say 'Hello' to your meal's manager!");
-        Label label = new Label();
-        button.setOnAction(event -> label.setText("Hello!"));
+
+        //button.setOnAction(event -> label.setText("Hello!"));
 
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
 
+        initEditor();
         initTable();
 
-        grid.add(table, 0, 0);
+        grid.add(meals, 0, 0);
+        grid.add(editor, 1, 0);
         Scene scene = new Scene(grid, 500, 300);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    private void initTable() {
-        table = new TableView<>();
+    private void initEditor() {
+        editor.add(nameCalories, 0 , 0);
+        editor.add(calories, 1, 0);
+        editor.add(nameDescription, 0, 1);
+        editor.add(description, 1, 1);
+        editor.add(nameDateTime, 0, 2);
+        editor.add(dateTime, 1, 2);
 
+        editor.add(save, 0 , 3);
+        editor.add(cancel, 1, 3);
+        delete.setStyle("-fx-text-fill: red");
+        editor.add(delete, 0, 4);
+
+        delete.setOnAction(event -> controller.delete(editingMealId));
+    }
+
+    private void initTable() {
         initColumns();
         initColoursForRows();
 
-        table.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
-            System.out.println(observable);
-            System.out.println(oldValue);
-            System.out.println(newValue);
+        meals.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
+            final UserMealWithExceed meal = observable.getValue();
+            editingMealId = meal.getId();
+            calories.setText(String.valueOf(meal.getCalories()));
+            description.setText(meal.getDescription());
+            dateTime.setText(String.valueOf(meal.getDateTime()));
         }));
 
-        ObservableList<UserMealWithExceed> data = FXCollections.observableArrayList(controller.getAll());
-        table.setItems(data);
+        data = FXCollections.observableArrayList(controller.getAll());
+        meals.setItems(data);
     }
 
     private void initColumns() {
@@ -124,11 +163,11 @@ public class ViewJavaFX extends Application implements View {
                 return null;
             }
         });
-        table.getColumns().addAll(description, dateTime, calories);
+        meals.getColumns().addAll(description, dateTime, calories);
     }
 
     private void initColoursForRows() {
-        table.setRowFactory(new Callback<TableView<UserMealWithExceed>, TableRow<UserMealWithExceed>>() {
+        meals.setRowFactory(new Callback<TableView<UserMealWithExceed>, TableRow<UserMealWithExceed>>() {
             @Override
             public TableRow<UserMealWithExceed> call(TableView<UserMealWithExceed> param) {
                 return new TableRow<UserMealWithExceed>() {
